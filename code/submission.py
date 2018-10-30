@@ -45,7 +45,9 @@ def eightpoint(pts1, pts2, M):
 
     F = helper.refineF(F, pts1, pts2)
     # F = helper.refineF(F, pts1_o, pts2_o)
-    F = F/M/M
+    # F = F/M/M
+    F = F*M*M
+
     np.savez("../results/q2_1.npz", F = F, M = M)
 
     return F
