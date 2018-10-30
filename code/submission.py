@@ -1,3 +1,5 @@
+import numpy as np
+import helper
 """
 Homework4.
 Replace 'pass' by your implementation.
@@ -14,8 +16,31 @@ Q2.1: Eight Point Algorithm
     Output: F, the fundamental matrix
 '''
 def eightpoint(pts1, pts2, M):
-    # Replace pass by your implementation
-    pass
+    pts1 = pts1/M
+    pts2 = pts2/M
+    A = np.zeros((pts1.shape[0], 9))
+    for i in range(pts1.shape[0]):
+        cord_1 = np.array([pts1[i, 1], pts1[i, 0], 1]).reshape((1, 3))
+        row = np.concatenate((pts2[i, 1] * cord_1, pts2[i, 0] * cord_1), axis=1)
+        row = np.concatenate((row, 1 * cord_1), axis=1)
+        A[i, :] = row.reshape(-1)
+
+    u, s, vh = np.linalg.svd(A)
+    F = np.transpose(vh)[:,-1]
+    '''
+        注意验证底下的refineF的输入中两套点是否是scale之后的
+    '''
+    F = helper.refineF(F, pts1, pts2)
+    F = F*M*M
+
+    return F
+
+
+
+
+
+
+
 
 
 '''
