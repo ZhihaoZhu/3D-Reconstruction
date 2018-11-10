@@ -37,7 +37,7 @@ def eightpoint(pts1, pts2, M):
 
         A[i, :] = row.reshape(-1)
     u, s, vh = np.linalg.svd(A)
-    F = vh[:,-1].reshape((3,3))
+    F = vh.transpose()[:,-1].reshape((3,3))
     # F = np.transpose(vh)[:,-1].reshape((3,3))
     '''
         the singularity constraint
