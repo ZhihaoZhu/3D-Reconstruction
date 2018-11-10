@@ -1,5 +1,7 @@
 import numpy as np
 import helper
+import sympy as sp
+
 """
 Homework4.
 Replace 'pass' by your implementation.
@@ -25,17 +27,17 @@ def eightpoint(pts1, pts2, M):
 
 
     A = np.zeros((pts1.shape[0], 9))
+    x = 0
+    y = 1
     for i in range(pts1.shape[0]):
-        A[i, 0:3] = np.array([pts1[i, 1], pts1[i, 0], 1]) * pts2[i, 1]
-        A[i, 3:6] = np.array([pts1[i, 1], pts1[i, 0], 1]) * pts2[i, 0]
-        A[i, 6:9] = np.array([pts1[i, 1], pts1[i, 0], 1]) * 1
+        A[i, 0:3] = np.array([pts1[i, x], pts1[i, y], 1]) * pts2[i, x]
+        A[i, 3:6] = np.array([pts1[i, x], pts1[i, y], 1]) * pts2[i, y]
+        A[i, 6:9] = np.array([pts1[i, x], pts1[i, y], 1])
 
     u, s, vh = np.linalg.svd(A)
 
     F = vh.transpose()[:,-1].reshape((3,3))
-    '''
-        the singularity constraint
-    '''
+
     u, s, vh = np.linalg.svd(F)
 
     ss = np.eye(3)
@@ -43,17 +45,12 @@ def eightpoint(pts1, pts2, M):
     ss[1,1] = s[1]
     ss[2,2] = s[2]
     F = u.dot(ss).dot(vh)
-
     F = helper.refineF(F, pts1, pts2)
-
     T = np.zeros((3, 3), dtype=np.float32)
     T[0, 0] = 1.0 / M
     T[1, 1] = 1.0 / M
     T[2, 2] = 1.0
-
     F = T.transpose() @ F @ T
-
-
     np.savez("../results/q2_1.npz", F = F, M = M)
 
     return F
@@ -66,8 +63,51 @@ Q2.2: Seven Point Algorithm
     Output: Farray, a list of estimated fundamental matrix.
 '''
 def sevenpoint(pts1, pts2, M):
-    # Replace pass by your implementation
-    pass
+    pts1 = pts1 / M
+    pts2 = pts2 / M
+
+    A = np.zeros((pts1.shape[0], 9))
+    x = 0
+    y = 1
+    for i in range(pts1.shape[0]):
+        A[i, 0:3] = np.array([pts1[i, x], pts1[i, y], 1]) * pts2[i, x]
+        A[i, 3:6] = np.array([pts1[i, x], pts1[i, y], 1]) * pts2[i, y]
+        A[i, 6:9] = np.array([pts1[i, x], pts1[i, y], 1])
+
+    u, s, vh = np.linalg.svd(A)
+
+    f1 = vh.transpose()[:, -1].reshape((3, 3))
+    f2 = vh.transpose()[:, -2].reshape((3, 3))
+
+
+    a = sp.Symbol('a')
+
+    FF = f1*a + f2*(1-a)
+    F = sp.Matrix(FF)
+    det = F.det()
+    alpha = sp.solve(det, a)
+
+    Farray = []
+    for i in range(len(alpha)):
+        F = f1*float(alpha[i].as_real_imag()[0]) + f2*(1-float(alpha[i].as_real_imag()[0]))
+        u, s, vh = np.linalg.svd(F)
+
+        ss = np.eye(3)
+        ss[0, 0] = s[0]
+        ss[1, 1] = s[1]
+        ss[2, 2] = s[2]
+        F = u.dot(ss).dot(vh)
+        F = helper.refineF(F, pts1, pts2)
+        T = np.zeros((3, 3), dtype=np.float32)
+        T[0, 0] = 1.0 / M
+        T[1, 1] = 1.0 / M
+        T[2, 2] = 1.0
+        F = T.transpose() @ F @ T
+        Farray.append(F)
+        print(F)
+
+
+    return Farray
 
 
 '''
@@ -78,8 +118,8 @@ Q3.1: Compute the essential matrix E.
     Output: E, the essential matrix
 '''
 def essentialMatrix(F, K1, K2):
-    # Replace pass by your implementation
-    pass
+    E = K2.transpose() @ F @ K1
+    return E
 
 
 '''
