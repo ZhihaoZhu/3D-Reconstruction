@@ -20,39 +20,39 @@ def eightpoint(pts1, pts2, M):
         Need to check the alternatives
     '''
 
-    pts1_o = pts1.copy()
-    pts2_o = pts2.copy()
-
     pts1 = pts1/M
     pts2 = pts2/M
+
+
     A = np.zeros((pts1.shape[0], 9))
     for i in range(pts1.shape[0]):
-        # cord_1 = np.array([pts1[i, 1], pts1[i, 0], 1]).reshape((1, 3))
-        # row = np.concatenate((pts2[i, 1] * cord_1, pts2[i, 0] * cord_1), axis=1)
-        # row = np.concatenate((row, 1 * cord_1), axis=1)
+        A[i, 0:3] = np.array([pts1[i, 1], pts1[i, 0], 1]) * pts2[i, 1]
+        A[i, 3:6] = np.array([pts1[i, 1], pts1[i, 0], 1]) * pts2[i, 0]
+        A[i, 6:9] = np.array([pts1[i, 1], pts1[i, 0], 1]) * 1
 
-        cord_1 = np.array([pts1[i, 0], pts1[i, 1], 1]).reshape((1, 3))
-        row = np.concatenate((pts2[i, 0] * cord_1, pts2[i, 1] * cord_1), axis=1)
-        row = np.concatenate((row, 1 * cord_1), axis=1)
-
-        A[i, :] = row.reshape(-1)
     u, s, vh = np.linalg.svd(A)
+
     F = vh.transpose()[:,-1].reshape((3,3))
-    # F = np.transpose(vh)[:,-1].reshape((3,3))
     '''
         the singularity constraint
     '''
     u, s, vh = np.linalg.svd(F)
+
     ss = np.eye(3)
     ss[0,0] = s[0]
     ss[1,1] = s[1]
-    ss[2,2] = 0
+    ss[2,2] = s[2]
     F = u.dot(ss).dot(vh)
 
-    # F = helper.refineF(F, pts1, pts2)
-    F = helper.refineF(F, pts1_o, pts2_o)
-    F = F/M/M
-    # F = F*M*M
+    F = helper.refineF(F, pts1, pts2)
+
+    T = np.zeros((3, 3), dtype=np.float32)
+    T[0, 0] = 1.0 / M
+    T[1, 1] = 1.0 / M
+    T[2, 2] = 1.0
+
+    F = T.transpose() @ F @ T
+
 
     np.savez("../results/q2_1.npz", F = F, M = M)
 
