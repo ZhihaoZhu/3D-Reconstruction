@@ -29,6 +29,53 @@ def displayEpipolarF(I1, I2, F):
     ax2.set_title('Verify that the corresponding point \n is on the epipolar line in this image')
     ax2.set_axis_off()
 
+    def onclick(event):
+        xc = event.xdata
+        yc = event.ydata
+
+        if not xc or not yc:
+            return
+
+        v = np.array([xc, yc, 1])
+        l = F.dot(v)
+        s = np.sqrt(l[0]**2+l[1]**2)
+
+        if s==0:
+            error('Zero line vector in displayEpipolar')
+
+        l = l/s
+
+        if l[0] != 0:
+            ye = sy-1
+            ys = 0
+            xe = -(l[1] * ye + l[2])/l[0]
+            xs = -(l[1] * ys + l[2])/l[0]
+        else:
+            xe = sx-1
+            xs = 0
+            ye = -(l[0] * xe + l[2])/l[1]
+            ys = -(l[0] * xs + l[2])/l[1]
+
+        ax1.plot(xc, yc, '*', MarkerSize=6, linewidth=2)
+        ax2.plot([xs, xe], [ys, ye], linewidth=2)
+        plt.draw()
+
+    f.canvas.mpl_connect('button_press_event', onclick)
+    plt.show()
+
+def displayEpipolarF_bak(I1, I2, F):
+    e1, e2 = _epipoles(F)
+
+    sy, sx, _ = I2.shape
+
+    f, [ax1, ax2] = plt.subplots(1, 2, figsize=(12, 9))
+    ax1.imshow(I1)
+    ax1.set_title('Select a point in this image')
+    ax1.set_axis_off()
+    ax2.imshow(I2)
+    ax2.set_title('Verify that the corresponding point \n is on the epipolar line in this image')
+    ax2.set_axis_off()
+
     while True:
         plt.sca(ax1)
         x, y = plt.ginput(1, mouse_stop=2)[0]
@@ -118,6 +165,8 @@ def epipolarMatchGUI(I1, I2, F):
     ax2.set_title('Verify that the corresponding point \n is on the epipolar line in this image')
     ax2.set_axis_off()
 
+    pts1 = []
+    pts2 = []
     while True:
         plt.sca(ax1)
         x, y = plt.ginput(1, mouse_stop=2)[0]
@@ -151,4 +200,26 @@ def epipolarMatchGUI(I1, I2, F):
         # draw points
         x2, y2 = sub.epipolarCorrespondence(I1, I2, F, xc, yc)
         ax2.plot(x2, y2, 'ro', MarkerSize=8, linewidth=2)
+        pts1.append([xc,yc])
+        pts2.append([x2,y2])
+
+
+        '''
+        #debug
+        x2, y2, sbegin, send = sub.epipolarCorrespondence(I1, I2, F, xc, yc)
+        ax2.plot(x2, y2, 'ro', MarkerSize=8, linewidth=2)
+        bx, by = sbegin[0, 0], sbegin[1, 0]
+        ex, ey = send[0, 0], send[1, 0]
+        ax2.plot(bx, by, 'go', MarkerSize=4, linewidth=2)
+        ax2.plot(ex, ey, 'bo', MarkerSize=4, linewidth=2)
+        '''
+
+
+        pts1_o = np.array(pts1)
+        pts2_o = np.array(pts2)
+        np.savez("../results/q4_1.npz", F=F, pts1=pts1_o, pts2=pts2_o)
+        print("yes")
         plt.draw()
+
+
+

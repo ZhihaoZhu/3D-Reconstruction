@@ -1,6 +1,9 @@
 import numpy as np
 import helper
 import sympy as sp
+import scipy
+import scipy.stats as st
+
 
 """
 Homework4.
@@ -34,6 +37,7 @@ def eightpoint(pts1, pts2, M):
         A[i, 3:6] = np.array([pts1[i, x], pts1[i, y], 1]) * pts2[i, y]
         A[i, 6:9] = np.array([pts1[i, x], pts1[i, y], 1])
 
+    # print("A",A)
     u, s, vh = np.linalg.svd(A)
 
     F = vh.transpose()[:,-1].reshape((3,3))
@@ -43,9 +47,9 @@ def eightpoint(pts1, pts2, M):
     ss = np.eye(3)
     ss[0,0] = s[0]
     ss[1,1] = s[1]
-    ss[2,2] = s[2]
+    ss[2,2] = 0
     F = u.dot(ss).dot(vh)
-    F = helper.refineF(F, pts1, pts2)
+    # F = helper.refineF(F, pts1, pts2)
     T = np.zeros((3, 3), dtype=np.float32)
     T[0, 0] = 1.0 / M
     T[1, 1] = 1.0 / M
@@ -97,7 +101,7 @@ def sevenpoint(pts1, pts2, M):
         ss[1, 1] = s[1]
         ss[2, 2] = s[2]
         F = u.dot(ss).dot(vh)
-        F = helper.refineF(F, pts1, pts2)
+        # F = helper.refineF(F, pts1, pts2)
         T = np.zeros((3, 3), dtype=np.float32)
         T[0, 0] = 1.0 / M
         T[1, 1] = 1.0 / M
@@ -132,8 +136,39 @@ Q3.2: Triangulate a set of 2D coordinates in the image to a set of 3D points.
             err, the reprojection error.
 '''
 def triangulate(C1, pts1, C2, pts2):
-    # Replace pass by your implementation
-    pass
+    # print(C1)
+    A = np.zeros((pts1.shape[0],4,4))
+    w = np.zeros((pts1.shape[0],4))
+    error = 0
+
+    for i in range(pts1.shape[0]):
+
+        A[i, 0, :] = C1[0, :] - pts1[i, 0] * C1[2, :]
+        A[i, 1, :] = C1[1, :] - pts1[i, 1] * C1[2, :]
+        A[i, 2, :] = C2[0, :] - pts2[i, 0] * C2[2, :]
+        A[i, 3, :] = C2[1, :] - pts2[i, 1] * C2[2, :]
+
+        u, s, vh = np.linalg.svd(A[i])
+        # print(A[i])
+        w_l = vh.transpose()[:, -1]
+        w_l[0:3] = w_l[0:3]/w_l[3]
+        w_l[3] = 1
+        w[i,:] = w_l
+        # print("haha",w_l)
+        # break
+
+    for i in range(pts1.shape[0]):
+        point1 = C1@w[i]
+        x = np.array([point1[0]/point1[2], point1[1]/point1[2]])
+
+
+        l1 = np.linalg.norm(x-pts1[i])**2
+        point2 = C2 @ w[i]
+        x = np.array([point2[0] / point2[2], point2[1] / point2[2]])
+        l2 = np.linalg.norm(x-pts2[i])**2
+        error = error + l1 + l2
+
+    return w, error
 
 
 '''
@@ -147,9 +182,56 @@ Q4.1: 3D visualization of the temple images.
             y2, y-coordinates of the pixel on im2
 
 '''
+
+# def gkern(kernlen=21, nsig=3):
+#     """Returns a 2D Gaussian kernel array."""
+#
+#     interval = (2*nsig+1.)/(kernlen)
+#     x = np.linspace(-nsig-interval/2., nsig+interval/2., kernlen+1)
+#     kern1d = np.diff(st.norm.cdf(x))
+#     kernel_raw = np.sqrt(np.outer(kern1d, kern1d))
+#     kernel = kernel_raw/kernel_raw.sum()
+#     return kernel
+
 def epipolarCorrespondence(im1, im2, F, x1, y1):
-    # Replace pass by your implementation
-    pass
+    X1 = np.array([x1,y1,1])
+    window_size = 1
+    cord = F@X1
+    width = im1.shape[1]
+    height = im1.shape[0]
+    y = np.arange(height).astype(int)
+    x = np.arange(height).astype(int)
+    for i in range(height):
+        x[i] = np.round((-cord[2]-y[i]*cord[1])/cord[0])
+        if x[i]<0 or x[i]>width:
+            x[i] = 666
+
+    kernlen = window_size*2+1
+    nsig = 3
+    interval = (2 * nsig + 1.) / (kernlen)
+    p = np.linspace(-nsig - interval / 2., nsig + interval / 2., kernlen + 1)
+    kern1d = np.diff(st.norm.cdf(p))
+    kernel_raw = np.sqrt(np.outer(kern1d, kern1d))
+    kernel = kernel_raw / kernel_raw.sum()
+
+    template = im1[y1-window_size:y1+window_size+1, x1-window_size:x1+window_size+1]
+    err = 10000
+    x2_o = 0
+    y2_o = 0
+    for i in range(3,height-3):
+        x2 = x[i]
+        y2 = y[i]
+        window = im2[y2-window_size:y2+window_size+1, x2-window_size:x2+window_size+1]
+
+        dist = np.linalg.norm((template-window)*kernel)
+        if dist<err:
+            x2_o = x2
+            y2_o = y2
+            err = dist
+
+    return x2_o, y2_o
+
+
 
 '''
 Q5.1: RANSAC method.
