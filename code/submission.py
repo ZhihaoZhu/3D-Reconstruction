@@ -83,7 +83,6 @@ def sevenpoint(pts1, pts2, M):
     f1 = vh.transpose()[:, -1].reshape((3, 3))
     f2 = vh.transpose()[:, -2].reshape((3, 3))
 
-
     a = sp.Symbol('a')
 
     FF = f1*a + f2*(1-a)
@@ -108,7 +107,6 @@ def sevenpoint(pts1, pts2, M):
         T[2, 2] = 1.0
         F = T.transpose() @ F @ T
         Farray.append(F)
-        print(F)
 
 
     return Farray
@@ -136,7 +134,6 @@ Q3.2: Triangulate a set of 2D coordinates in the image to a set of 3D points.
             err, the reprojection error.
 '''
 def triangulate(C1, pts1, C2, pts2):
-    # print(C1)
     A = np.zeros((pts1.shape[0],4,4))
     w = np.zeros((pts1.shape[0],4))
     error = 0
@@ -154,8 +151,7 @@ def triangulate(C1, pts1, C2, pts2):
         w_l[0:3] = w_l[0:3]/w_l[3]
         w_l[3] = 1
         w[i,:] = w_l
-        # print("haha",w_l)
-        # break
+
 
     for i in range(pts1.shape[0]):
         point1 = C1@w[i]
@@ -183,15 +179,6 @@ Q4.1: 3D visualization of the temple images.
 
 '''
 
-# def gkern(kernlen=21, nsig=3):
-#     """Returns a 2D Gaussian kernel array."""
-#
-#     interval = (2*nsig+1.)/(kernlen)
-#     x = np.linspace(-nsig-interval/2., nsig+interval/2., kernlen+1)
-#     kern1d = np.diff(st.norm.cdf(x))
-#     kernel_raw = np.sqrt(np.outer(kern1d, kern1d))
-#     kernel = kernel_raw/kernel_raw.sum()
-#     return kernel
 
 def epipolarCorrespondence(im1, im2, F, x1, y1):
     X1 = np.array([x1,y1,1])
@@ -241,8 +228,51 @@ Q5.1: RANSAC method.
     Output: F, the fundamental matrix
 '''
 def ransacF(pts1, pts2, M):
-    # Replace pass by your implementation
-    pass
+    iter_num = 50
+    index_max = 0
+    threshold = 0.001
+    F_final = np.zeros((3,3))
+    p1_final = []
+    p2_final = []
+    for i in range(iter_num):
+        print(i)
+        ids = np.random.randint(low=0, high=pts1.shape[0], size=7)
+        pset1 = pts1[ids, :]
+        pset2 = pts2[ids, :]
+        Farray = sevenpoint(pset1, pset2, M)
+        for j in range(len(Farray)):
+            F = Farray[j]
+            index = 0
+            p1_to_store = []
+            p2_to_store = []
+
+            for g in range(pts1.shape[0]):
+                p1 = np.array([pts1[g,0], pts1[g,1], 1])
+                p2 = np.array([pts2[g,0], pts2[g,1], 1])
+                err = abs(p2.transpose() @ F @ p1)
+                if err<threshold:
+                    index = index+1
+                    p1_to_store.append([pts1[g,0], pts1[g,1]])
+                    p2_to_store.append([pts2[g,0], pts2[g,1]])
+
+            # print("index", index)
+            if index > index_max:
+                p1_final = np.array(p1_to_store)
+                p2_final = np.array(p2_to_store)
+                index_max = index
+                print(index_max)
+                F_final = F
+
+    F_output = eightpoint(p1_final, p2_final, M)
+
+
+    return F_output
+
+
+
+
+
+
 
 '''
 Q5.2: Rodrigues formula.

@@ -203,7 +203,6 @@ def epipolarMatchGUI(I1, I2, F):
         pts1.append([xc,yc])
         pts2.append([x2,y2])
 
-
         '''
         #debug
         x2, y2, sbegin, send = sub.epipolarCorrespondence(I1, I2, F, xc, yc)
@@ -213,7 +212,6 @@ def epipolarMatchGUI(I1, I2, F):
         ax2.plot(bx, by, 'go', MarkerSize=4, linewidth=2)
         ax2.plot(ex, ey, 'bo', MarkerSize=4, linewidth=2)
         '''
-
 
         pts1_o = np.array(pts1)
         pts2_o = np.array(pts2)

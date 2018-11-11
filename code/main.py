@@ -68,7 +68,7 @@ import scipy
 # C1 = K1@M1
 #
 # index = 0
-# error_now = 10000
+# error_now = 10000000
 # for i in range(4):
 #     C2 = K2 @ M2s[:, :, i]  # To be modified
 #     w, error = submission.triangulate(C1, pts1, C2, pts2)
@@ -77,31 +77,48 @@ import scipy
 #         index = i
 #         C2_save = C2
 #         w_save = w
-#
+
 # np.savez("../results/q3_3.npz", M2=M2s[:, :, index], C2=C2_save, P=w_save)
 
 
 '''
     Q4_1
 '''
+#
+# I1 = plt.imread('../data/im1.png')
+# I2 = plt.imread('../data/im2.png')
+# # I1 = np.dot(I1[...,:3], [0.299, 0.587, 0.114])
+# # I2 = np.dot(I2[...,:3], [0.299, 0.587, 0.114])
+#
+# K = np.load("../data/intrinsics.npz")
+# corresp = np.load("../data/some_corresp.npz")
+# pts1 = corresp["pts1"]
+# pts2 = corresp["pts2"]
+# M = np.max(I1.shape)
+# K1 = K['K1']
+# K2 = K['K2']
+# F = submission.eightpoint(pts1, pts2, M)
+#
+# helper.epipolarMatchGUI(I1, I2, F)
+
+'''
+    Q5_1
+'''
+
+
+corresp = np.load("../data/some_corresp_noisy.npz")
+pts1 = corresp["pts1"]
+pts2 = corresp["pts2"]
 
 I1 = plt.imread('../data/im1.png')
 I2 = plt.imread('../data/im2.png')
-# I1 = np.dot(I1[...,:3], [0.299, 0.587, 0.114])
-# I2 = np.dot(I2[...,:3], [0.299, 0.587, 0.114])
+M = np.maximum(I1.shape[0],I1.shape[1])
 
-K = np.load("../data/intrinsics.npz")
-corresp = np.load("../data/some_corresp.npz")
-pts1 = corresp["pts1"]
-pts2 = corresp["pts2"]
-M = np.max(I1.shape)
-K1 = K['K1']
-K2 = K['K2']
-F = submission.eightpoint(pts1, pts2, M)
+F = submission.ransacF(pts1, pts2, M)
 
-helper.epipolarMatchGUI(I1, I2, F)
+# np.savez("../results/q5_1.npz", F=F, M=M, pts1=pts1, pts2=pts2)
 
-
+helper.displayEpipolarF(I1, I2, F)
 
 
 
