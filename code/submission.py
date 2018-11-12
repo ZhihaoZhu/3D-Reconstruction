@@ -157,7 +157,6 @@ def triangulate(C1, pts1, C2, pts2):
         point1 = C1@w[i]
         x = np.array([point1[0]/point1[2], point1[1]/point1[2]])
 
-
         l1 = np.linalg.norm(x-pts1[i])**2
         point2 = C2 @ w[i]
         x = np.array([point2[0] / point2[2], point2[1] / point2[2]])
@@ -181,6 +180,7 @@ Q4.1: 3D visualization of the temple images.
 
 
 def epipolarCorrespondence(im1, im2, F, x1, y1):
+
     X1 = np.array([x1,y1,1])
     window_size = 1
     cord = F@X1
@@ -202,6 +202,7 @@ def epipolarCorrespondence(im1, im2, F, x1, y1):
     kernel = kernel_raw / kernel_raw.sum()
 
     template = im1[y1-window_size:y1+window_size+1, x1-window_size:x1+window_size+1]
+
     err = 10000
     x2_o = 0
     y2_o = 0
@@ -211,6 +212,8 @@ def epipolarCorrespondence(im1, im2, F, x1, y1):
         window = im2[y2-window_size:y2+window_size+1, x2-window_size:x2+window_size+1]
 
         dist = np.linalg.norm((template-window)*kernel)
+        # dist = np.linalg.norm(template-window)
+
         if dist<err:
             x2_o = x2
             y2_o = y2
@@ -228,7 +231,7 @@ Q5.1: RANSAC method.
     Output: F, the fundamental matrix
 '''
 def ransacF(pts1, pts2, M):
-    iter_num = 50
+    iter_num = 1
     index_max = 0
     threshold = 0.001
     F_final = np.zeros((3,3))
@@ -266,10 +269,7 @@ def ransacF(pts1, pts2, M):
     F_output = eightpoint(p1_final, p2_final, M)
 
 
-    return F_output
-
-
-
+    return F_output, p1_final, p2_final
 
 
 
@@ -280,8 +280,12 @@ Q5.2: Rodrigues formula.
     Output: R, a rotation matrix
 '''
 def rodrigues(r):
-    # Replace pass by your implementation
-    pass
+    angle = np.sum(r ** 2) ** 0.5
+    s = r / angle
+    s1, s2, s3 = s[0, 0], s[1, 0], s[2, 0]
+    s_cross = np.array([[0, -s3, s2], [s3, 0, -s1], [-s2, s1, 0]], dtype=np.float32)
+    R = np.eye(3, dtype=np.float32) * np.cos(angle) + (1 - np.cos(angle)) * (s @ s.transpose()) + s_cross * np.sin(angle)
+    return R
 
 '''
 Q5.2: Inverse Rodrigues formula.
@@ -289,8 +293,40 @@ Q5.2: Inverse Rodrigues formula.
     Output: r, a 3x1 vector
 '''
 def invRodrigues(R):
-    # Replace pass by your implementation
-    pass
+    eps = 0.001
+    A = (R - R.transpose())/2
+    a32, a13, a21 = A[2, 1], A[0, 2], A[1, 0]
+    ps = np.array([[a32], [a13], [a21]])
+    s = np.sum(ps ** 2) ** 0.5
+    c = (R[0, 0] + R[1, 1] + R[2, 2] - 1) / 2
+    if abs(s)<eps and abs(c-1)<eps:
+        return np.zeros((3, 1))
+    elif abs(s)<eps and abs(c+1)<eps:
+        V = R + np.eye(3)
+        mark = np.where(np.sum(V ** 2, axis=0) > eps)[0]
+        v = V[:, mark[0]]
+        u = v / (np.sum(v ** 2) ** 0.5)
+        rr = u * np.pi
+        length = np.sum(rr ** 2) ** 0.5
+        r1, r2, r3 = rr[0, 0], rr[1, 0], rr[2, 0]
+        if (abs(length-np.pi)<eps and abs(r1-r2)<eps and abs(r1)<eps and (-r3)<eps) \
+                or (abs(r1)<eps and (-r2)<eps) \
+                or ((-r1)<eps):
+            return -rr
+        else:
+            return rr
+
+    elif not abs(s)<eps:
+        u = ps / s
+        if (-c)>eps:
+            angle = np.arctan(s / c)
+        elif (-c)>eps:
+            angle = np.pi + np.arctan(s / c)
+        elif abs(c)<eps and s>eps:
+            angle = np.pi * 0.5
+        elif abs(s)<eps and (-s)>eps:
+            angle =  -np.pi * 0.5
+        return u * angle
 
 '''
 Q5.3: Rodrigues residual.
@@ -303,8 +339,34 @@ Q5.3: Rodrigues residual.
     Output: residuals, the difference between original and estimated projections
 '''
 def rodriguesResidual(K1, M1, p1, K2, p2, x):
-    # Replace pass by your implementation
-    pass
+    p1 = p1.transpose()
+    p2 = p2.transpose()
+
+
+    w = x[6:].reshape((3,-1))
+    r = x[0:3].reshape((3,1))
+    t = x[3:6]
+    w = np.concatenate((w,np.ones((1,w.shape[1]))),axis=0)
+    R = rodrigues(r)
+    M2 = np.zeros((3,4))
+    M2[:,:3] = R
+    M2[:,3] = t
+
+
+    p1_h = K1@M1@w
+    p2_h = K2@M2@w
+    p1_h_f = p1_h[0:2,:]/p1_h[2,:]
+    p2_h_f = p2_h[0:2,:]/p2_h[2,:]
+
+    e1 = p1-p1_h_f
+    e1 = e1.reshape(-1)
+    e2 = p2-p2_h_f
+    e2 = e2.reshape(-1)
+
+    residual = np.concatenate((e1, e2), axis=0)
+
+    return residual
+
 
 '''
 Q5.3 Bundle adjustment.
@@ -319,5 +381,33 @@ Q5.3 Bundle adjustment.
             P2, the optimized 3D coordinates of points
 '''
 def bundleAdjustment(K1, M1, p1, K2, M2_init, p2, P_init):
-    # Replace pass by your implementation
-    pass
+    residual = lambda x: rodriguesResidual(K1, M1, p1, K2, p2, x)
+    R2_init = M2_init[:, 0:3]
+    t2_init = M2_init[:, 3]
+    r2_init = invRodrigues(R2_init).reshape(-1)
+
+
+    x_init = np.zeros(6+P_init.shape[0]*3)
+    x_init[0:3] = r2_init
+    x_init[3:6] = t2_init
+    x_init[6:] = P_init.reshape(-1)
+
+    print("done2")
+    x_optim, _ = scipy.optimize.leastsq(residual, x_init)
+    print("done")
+    # print('Reprojection error after BA: %f' % np.sum(residual(x_optim) ** 2))
+
+
+    r = x_optim[0:3].reshape((3,1))
+    t = x_optim[3:6]
+    P = x_optim[6:].reshape((-1,3))
+
+    R = rodrigues(r)
+    M2 = np.zeros((3, 4))
+    M2[:, :3] = R
+    M2[:, 3] = t
+    return M2, P
+
+
+
+

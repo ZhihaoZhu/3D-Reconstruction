@@ -33,15 +33,10 @@ F = submission.eightpoint(pts1, pts2, M)
 
 
 for i in range(len(x1)):
-
-
     x2[i], y2[i] = submission.epipolarCorrespondence(I1, I2, F, x1[i], y1[i])
-
 
 pointset1 = np.concatenate((x1.reshape((-1,1)),y1.reshape((-1,1))),axis=1)
 pointset2 = np.concatenate((x2.reshape((-1,1)),y2.reshape((-1,1))),axis=1)
-
-
 
 K1 = K['K1']
 K2 = K['K2']

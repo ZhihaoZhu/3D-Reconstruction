@@ -25,10 +25,9 @@ M = np.max(I1.shape)
 K1 = K['K1']
 K2 = K['K2']
 F = submission.eightpoint(pts1, pts2, M)
-print(F)
+
+
 E = submission.essentialMatrix(F, K1, K2)
-
-
 M2s = helper.camera2(E)
 M1 = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0]])
 C1 = K1@M1
