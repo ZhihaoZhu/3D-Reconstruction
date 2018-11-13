@@ -69,6 +69,7 @@ for i in range(4):
             index = i
             C2_save = C2
             w_save = w
+print("error_now",error_now)
 
 P = w_save
 

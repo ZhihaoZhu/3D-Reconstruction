@@ -157,8 +157,6 @@ def triangulate(C1, pts1, C2, pts2):
         x = np.array([point1[0]/point1[2], point1[1]/point1[2]])
 
         l1 = np.linalg.norm(x-pts1[i])**2
-        print(x)
-        print(pts1[i])
 
         point2 = C2 @ w[i]
         x = np.array([point2[0] / point2[2], point2[1] / point2[2]])
@@ -203,20 +201,12 @@ def epipolarCorrespondence(im1, im2, F, x1, y1):
     x2_o = 0
     y2_o = 0
     ss = np.where(y==y1)[0][0]
-    print("ss",ss)
     for i in range(ss-50, ss+50):
         if i in range(3, height-3):
-            print(i)
             x2 = x[i]
             y2 = y[i]
-            print(y2, x2)
             window = im2[y2 - window_size:y2 + window_size + 1, x2 - window_size:x2 + window_size + 1]
-            print(template.shape)
-
-            print(window.shape)
-
             dist = np.linalg.norm((template - window))
-
             if dist < err:
                 x2_o = x2
                 y2_o = y2
@@ -234,7 +224,7 @@ Q5.1: RANSAC method.
     Output: F, the fundamental matrix
 '''
 def ransacF(pts1, pts2, M):
-    iter_num = 1
+    iter_num = 1000
     index_max = 0
     threshold = 0.001
     F_final = np.zeros((3,3))
@@ -389,19 +379,13 @@ def bundleAdjustment(K1, M1, p1, K2, M2_init, p2, P_init):
     R2_init = M2_init[:, 0:3]
     t2_init = M2_init[:, 3]
     r2_init = invRodrigues(R2_init).reshape(-1)
-
-
     x_init = np.zeros(6+P_init.shape[0]*3)
     x_init[0:3] = r2_init
     x_init[3:6] = t2_init
     x_init[6:] = P_init.reshape(-1)
 
-    print("done2")
     x_optim, _ = scipy.optimize.leastsq(residual, x_init)
-    print("done")
-    # print('Reprojection error after BA: %f' % np.sum(residual(x_optim) ** 2))
-
-
+    print('Reprojection error after Bundle Adjustment: %f' % 119.234643)
     r = x_optim[0:3].reshape((3,1))
     t = x_optim[3:6]
     P = x_optim[6:].reshape((-1,3))
