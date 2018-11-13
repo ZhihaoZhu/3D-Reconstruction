@@ -146,7 +146,6 @@ def triangulate(C1, pts1, C2, pts2):
         A[i, 3, :] = C2[1, :] - pts2[i, 1] * C2[2, :]
 
         u, s, vh = np.linalg.svd(A[i])
-        # print(A[i])
         w_l = vh.transpose()[:, -1]
         w_l[0:3] = w_l[0:3]/w_l[3]
         w_l[3] = 1
@@ -158,6 +157,9 @@ def triangulate(C1, pts1, C2, pts2):
         x = np.array([point1[0]/point1[2], point1[1]/point1[2]])
 
         l1 = np.linalg.norm(x-pts1[i])**2
+        print(x)
+        print(pts1[i])
+
         point2 = C2 @ w[i]
         x = np.array([point2[0] / point2[2], point2[1] / point2[2]])
         l2 = np.linalg.norm(x-pts2[i])**2
@@ -188,36 +190,37 @@ def epipolarCorrespondence(im1, im2, F, x1, y1):
     height = im1.shape[0]
     y = np.arange(height).astype(int)
     x = np.arange(height).astype(int)
-    for i in range(height):
+    for i in range(y1-50, y1+50):
         x[i] = np.round((-cord[2]-y[i]*cord[1])/cord[0])
         if x[i]<0 or x[i]>width:
             x[i] = 666
+            print("wrong")
 
-    kernlen = window_size*2+1
-    nsig = 3
-    interval = (2 * nsig + 1.) / (kernlen)
-    p = np.linspace(-nsig - interval / 2., nsig + interval / 2., kernlen + 1)
-    kern1d = np.diff(st.norm.cdf(p))
-    kernel_raw = np.sqrt(np.outer(kern1d, kern1d))
-    kernel = kernel_raw / kernel_raw.sum()
 
     template = im1[y1-window_size:y1+window_size+1, x1-window_size:x1+window_size+1]
 
     err = 10000
     x2_o = 0
     y2_o = 0
-    for i in range(3,height-3):
-        x2 = x[i]
-        y2 = y[i]
-        window = im2[y2-window_size:y2+window_size+1, x2-window_size:x2+window_size+1]
+    ss = np.where(y==y1)[0][0]
+    print("ss",ss)
+    for i in range(ss-50, ss+50):
+        if i in range(3, height-3):
+            print(i)
+            x2 = x[i]
+            y2 = y[i]
+            print(y2, x2)
+            window = im2[y2 - window_size:y2 + window_size + 1, x2 - window_size:x2 + window_size + 1]
+            print(template.shape)
 
-        dist = np.linalg.norm((template-window)*kernel)
-        # dist = np.linalg.norm(template-window)
+            print(window.shape)
 
-        if dist<err:
-            x2_o = x2
-            y2_o = y2
-            err = dist
+            dist = np.linalg.norm((template - window))
+
+            if dist < err:
+                x2_o = x2
+                y2_o = y2
+                err = dist
 
     return x2_o, y2_o
 
@@ -318,6 +321,7 @@ def invRodrigues(R):
 
     elif not abs(s)<eps:
         u = ps / s
+        angle = 0
         if (-c)>eps:
             angle = np.arctan(s / c)
         elif (-c)>eps:

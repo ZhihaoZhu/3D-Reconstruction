@@ -18,15 +18,24 @@ Q4.2:
 templeCoords = np.load("../data/templeCoords.npz")
 corresp = np.load("../data/some_corresp.npz")
 K = np.load("../data/intrinsics.npz")
+I1 = plt.imread('../data/im1.png')
+I2 = plt.imread('../data/im2.png')
 
 pts1 = corresp["pts1"]
 pts2 = corresp["pts2"]
+
+# ppp = 1
+# print(pts1[ppp,1], pts2[ppp,1])
+# print(pts1[ppp,0], pts2[ppp,0])
+
+
 x1 = templeCoords["x1"].reshape(-1)
 y1 = templeCoords["y1"].reshape(-1)
+# x1 = pts1[:,0].reshape(-1)
+# y1 = pts1[:,1].reshape(-1)
 x2 = x1.copy()
 y2 = y1.copy()
-I1 = plt.imread('../data/im1.png')
-I2 = plt.imread('../data/im2.png')
+
 
 M = np.max(I1.shape)
 F = submission.eightpoint(pts1, pts2, M)
@@ -37,6 +46,7 @@ for i in range(len(x1)):
 
 pointset1 = np.concatenate((x1.reshape((-1,1)),y1.reshape((-1,1))),axis=1)
 pointset2 = np.concatenate((x2.reshape((-1,1)),y2.reshape((-1,1))),axis=1)
+
 
 K1 = K['K1']
 K2 = K['K2']
@@ -54,13 +64,11 @@ for i in range(4):
     C2 = K2 @ M2s[:, :, i]  # To be modified
     w, error = submission.triangulate(C1, pointset1, C2, pointset2)
     if error<error_now:
-        error_now = error
-        index = i
-        C2_save = C2
-        w_save = w
-    print(error)
-print(w_save)
-print(w_save.shape)
+        if np.min(w[:,2])>0:
+            error_now = error
+            index = i
+            C2_save = C2
+            w_save = w
 
 P = w_save
 
@@ -77,4 +85,3 @@ ax.set_zlim3d(zmin, zmax)
 
 ax.scatter(P[:, 0], P[:, 1], P[:, 2], c='b', marker='o')
 plt.show()
-

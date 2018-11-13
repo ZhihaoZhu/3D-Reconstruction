@@ -13,7 +13,6 @@ Q3.3:
     3. Save the correct M2, C2, p1, p2, R and P to q3_3.mat
 '''
 
-
 I1 = plt.imread('../data/im1.png')
 
 K = np.load("../data/intrinsics.npz")
@@ -45,7 +44,23 @@ for i in range(4):
         C2_save = C2
         w_save = w
     print(error)
+print(M2s[:, :, index])
 
 np.savez("../results/q3_3.npz", M2=M2s[:, :, index], C2=C2_save, P=w_save)
+
+P=w_save
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+xmin, xmax = np.min(P[:, 0]), np.max(P[:, 0])
+ymin, ymax = np.min(P[:, 1]), np.max(P[:, 1])
+zmin, zmax = np.min(P[:, 2]), np.max(P[:, 2])
+
+ax.set_xlim3d(xmin, xmax)
+ax.set_ylim3d(ymin, ymax)
+ax.set_zlim3d(zmin, zmax)
+
+ax.scatter(P[:, 0], P[:, 1], P[:, 2], c='b', marker='o')
+plt.show()
 
 
