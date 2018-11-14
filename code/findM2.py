@@ -5,6 +5,8 @@ import submission
 import matplotlib.pyplot as plt
 import scipy.optimize
 import scipy
+from mpl_toolkits.mplot3d import Axes3D
+
 
 '''
 Q3.3:
@@ -44,23 +46,10 @@ for i in range(4):
         C2_save = C2
         w_save = w
     print(error)
-print(M2s[:, :, index])
+
+print("best error result:", error_now)
 
 np.savez("../results/q3_3.npz", M2=M2s[:, :, index], C2=C2_save, P=w_save)
 
-P=w_save
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-xmin, xmax = np.min(P[:, 0]), np.max(P[:, 0])
-ymin, ymax = np.min(P[:, 1]), np.max(P[:, 1])
-zmin, zmax = np.min(P[:, 2]), np.max(P[:, 2])
-
-ax.set_xlim3d(xmin, xmax)
-ax.set_ylim3d(ymin, ymax)
-ax.set_zlim3d(zmin, zmax)
-
-ax.scatter(P[:, 0], P[:, 1], P[:, 2], c='b', marker='o')
-plt.show()
 
 

@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f233a68a-ef09-4f0a-837e-4e021bc9d11c" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code/findM2.py" afterPath="$PROJECT_DIR$/code/findM2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code/main.py" afterPath="$PROJECT_DIR$/code/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code/submission.py" afterPath="$PROJECT_DIR$/code/submission.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code/visualize.py" afterPath="$PROJECT_DIR$/code/visualize.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/q2_1.npz" afterPath="$PROJECT_DIR$/results/q2_1.npz" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/q3_3.npz" afterPath="$PROJECT_DIR$/results/q3_3.npz" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/q4_1.npz" afterPath="$PROJECT_DIR$/results/q4_1.npz" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,18 +23,18 @@
       <file leaf-file-name="helper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/helper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="51" column="27" lean-forward="false" selection-start-line="51" selection-start-column="27" selection-end-line="51" selection-end-column="27" />
+            <state relative-caret-position="355">
+              <caret line="217" column="20" lean-forward="true" selection-start-line="217" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="submission.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="submission.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/submission.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1158">
-              <caret line="380" column="29" lean-forward="true" selection-start-line="380" selection-start-column="29" selection-end-line="380" selection-end-column="29" />
+            <state relative-caret-position="341">
+              <caret line="239" column="21" lean-forward="true" selection-start-line="239" selection-start-column="21" selection-end-line="239" selection-end-column="21" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -39,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="255">
+              <caret line="17" column="36" lean-forward="true" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -54,8 +57,8 @@
       <file leaf-file-name="visualize.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/visualize.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-384">
-              <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="411">
+              <caret line="69" column="24" lean-forward="true" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -102,8 +105,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="78" />
-    <option name="y" value="42" />
+    <option name="x" value="474" />
+    <option name="y" value="23" />
     <option name="width" value="1253" />
     <option name="height" value="875" />
   </component>
@@ -367,14 +370,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="78" y="42" width="1253" height="875" extended-state="0" />
+    <frame x="474" y="23" width="1253" height="875" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20111732" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287841" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27543426" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27543426" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -517,38 +520,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/helper.py">
+    <entry file="file://$USER_HOME$/miniconda3/lib/python3.6/site-packages/matplotlib/projections/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="51" column="27" lean-forward="false" selection-start-line="51" selection-start-column="27" selection-end-line="51" selection-end-column="27" />
+        <state relative-caret-position="186">
+          <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/code/findM2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        <state relative-caret-position="439">
+          <caret line="54" column="0" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="217" column="20" lean-forward="true" selection-start-line="217" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/code/visualize.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-384">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/submission.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1158">
-          <caret line="380" column="29" lean-forward="true" selection-start-line="380" selection-start-column="29" selection-end-line="380" selection-end-column="29" />
+        <state relative-caret-position="411">
+          <caret line="69" column="24" lean-forward="true" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -557,8 +558,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        <state relative-caret-position="255">
+          <caret line="17" column="36" lean-forward="true" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/submission.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="239" column="21" lean-forward="true" selection-start-line="239" selection-start-column="21" selection-end-line="239" selection-end-column="21" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

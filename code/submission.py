@@ -100,7 +100,6 @@ def sevenpoint(pts1, pts2, M):
         ss[1, 1] = s[1]
         ss[2, 2] = s[2]
         F = u.dot(ss).dot(vh)
-        # F = helper.refineF(F, pts1, pts2)
         T = np.zeros((3, 3), dtype=np.float32)
         T[0, 0] = 1.0 / M
         T[1, 1] = 1.0 / M
@@ -163,7 +162,7 @@ def triangulate(C1, pts1, C2, pts2):
         l2 = np.linalg.norm(x-pts2[i])**2
         error = error + l1 + l2
 
-    return w, error
+    return w[:,0:3], error
 
 
 '''
@@ -224,7 +223,7 @@ Q5.1: RANSAC method.
     Output: F, the fundamental matrix
 '''
 def ransacF(pts1, pts2, M):
-    iter_num = 1000
+    iter_num = 100
     index_max = 0
     threshold = 0.001
     F_final = np.zeros((3,3))

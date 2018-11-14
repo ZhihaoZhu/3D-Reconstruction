@@ -71,6 +71,8 @@ for i in range(4):
             w_save = w
 print("error_now",error_now)
 
+np.savez("../results/q4_2.npz", F=F, M1 = M1, M2 = M2s[:,:,index], C1 = C1, C2 = C2_save)
+
 P = w_save
 
 fig = plt.figure()
