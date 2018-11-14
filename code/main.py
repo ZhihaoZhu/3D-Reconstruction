@@ -7,25 +7,32 @@ import scipy.optimize
 import scipy
 from mpl_toolkits.mplot3d import Axes3D
 
+'''
+Please un-comment the block to run corresponding question
+'''
 
 '''
     Q2_1
 '''
-# corresp = np.load("../data/some_corresp.npz")
-# pts1 = corresp["pts1"]
-# pts2 = corresp["pts2"]
-# I1 = plt.imread('../data/im1.png')
-# I2 = plt.imread('../data/im2.png')
-#
-# M = np.maximum(I1.shape[0],I1.shape[1])
-#
-# F = submission.eightpoint(pts1, pts2, M)
-# print(F)
-# helper.displayEpipolarF(I1, I2, F)
+print("Running Question 2_1")
+
+corresp = np.load("../data/some_corresp.npz")
+pts1 = corresp["pts1"]
+pts2 = corresp["pts2"]
+I1 = plt.imread('../data/im1.png')
+I2 = plt.imread('../data/im2.png')
+
+M = np.maximum(I1.shape[0],I1.shape[1])
+
+F = submission.eightpoint(pts1, pts2, M)
+print(F)
+helper.displayEpipolarF(I1, I2, F)
 
 '''
     Q2_2
 '''
+# print("Running Question 2_2")
+
 # corresp = np.load("../data/some_corresp.npz")
 # pts1 = corresp["pts1"]
 # pts2 = corresp["pts2"]
@@ -46,6 +53,8 @@ from mpl_toolkits.mplot3d import Axes3D
 '''
     Q3_1
 '''
+# print("Running Question 3_1")
+
 # F = np.load("../results/q2_1.npz")["F"]
 # K = np.load("../data/intrinsics.npz")
 # K1 = K['K1']
@@ -56,6 +65,9 @@ from mpl_toolkits.mplot3d import Axes3D
 '''
     Q4_1
 '''
+
+# print("Running Question 4_1")
+
 #
 # I1 = plt.imread('../data/im1.png')
 # I2 = plt.imread('../data/im2.png')
@@ -74,6 +86,7 @@ from mpl_toolkits.mplot3d import Axes3D
     Q5_1
 '''
 
+# print("Running Question 5_1")
 
 # corresp = np.load("../data/some_corresp_noisy.npz")
 # pts1 = corresp["pts1"]
@@ -96,15 +109,14 @@ from mpl_toolkits.mplot3d import Axes3D
 '''
     Q5_3
 '''
-
+# print("Running Question 5_3")
 # corresp = np.load("../data/some_corresp_noisy.npz")
 # pts1 = corresp["pts1"]
 # pts2 = corresp["pts2"]
 # I1 = plt.imread('../data/im1.png')
 # I2 = plt.imread('../data/im2.png')
 # M = np.maximum(I1.shape[0],I1.shape[1])
-# # F, pts1_in, pts2_in = submission.ransacF(pts1, pts2, M)
-#
+# F, pts1_in, pts2_in = submission.ransacF(pts1, pts2, M)
 # corresp = np.load("../data/some_corresp.npz")
 # pts1 = corresp["pts1"]
 # pts2 = corresp["pts2"]
@@ -165,7 +177,7 @@ from mpl_toolkits.mplot3d import Axes3D
 #
 # ax.scatter(P[:, 0], P[:, 1], P[:, 2], c='b', marker='o')
 # plt.show()
-#
+
 
 
 

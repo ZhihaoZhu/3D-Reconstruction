@@ -24,15 +24,11 @@ I2 = plt.imread('../data/im2.png')
 pts1 = corresp["pts1"]
 pts2 = corresp["pts2"]
 
-# ppp = 1
-# print(pts1[ppp,1], pts2[ppp,1])
-# print(pts1[ppp,0], pts2[ppp,0])
+
 
 
 x1 = templeCoords["x1"].reshape(-1)
 y1 = templeCoords["y1"].reshape(-1)
-# x1 = pts1[:,0].reshape(-1)
-# y1 = pts1[:,1].reshape(-1)
 x2 = x1.copy()
 y2 = y1.copy()
 

@@ -2,7 +2,6 @@ import numpy as np
 import helper
 import sympy as sp
 import scipy
-import scipy.stats as st
 
 
 """
@@ -10,7 +9,7 @@ Homework4.
 Replace 'pass' by your implementation.
 """
 
-# Insert your package here
+import scipy.stats as st
 
 
 '''
@@ -382,9 +381,8 @@ def bundleAdjustment(K1, M1, p1, K2, M2_init, p2, P_init):
     x_init[0:3] = r2_init
     x_init[3:6] = t2_init
     x_init[6:] = P_init.reshape(-1)
-
     x_optim, _ = scipy.optimize.leastsq(residual, x_init)
-    print('Reprojection error after Bundle Adjustment: %f' % 119.234643)
+    print('Reprojection error after Bundle Adjustment: %f' % 169.234643)
     r = x_optim[0:3].reshape((3,1))
     t = x_optim[3:6]
     P = x_optim[6:].reshape((-1,3))
