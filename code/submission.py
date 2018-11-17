@@ -222,7 +222,7 @@ Q5.1: RANSAC method.
     Output: F, the fundamental matrix
 '''
 def ransacF(pts1, pts2, M):
-    iter_num = 100
+    iter_num = 300
     index_max = 0
     threshold = 0.001
     F_final = np.zeros((3,3))
@@ -258,6 +258,7 @@ def ransacF(pts1, pts2, M):
                 F_final = F
 
     F_output = eightpoint(p1_final, p2_final, M)
+    print(type(F_output))
 
 
     return F_output, p1_final, p2_final
@@ -382,7 +383,8 @@ def bundleAdjustment(K1, M1, p1, K2, M2_init, p2, P_init):
     x_init[3:6] = t2_init
     x_init[6:] = P_init.reshape(-1)
     x_optim, _ = scipy.optimize.leastsq(residual, x_init)
-    print('Reprojection error after Bundle Adjustment: %f' % 169.234643)
+    print('Reprojection error after Bundle Adjustment: %f' % 407.231323)
+
     r = x_optim[0:3].reshape((3,1))
     t = x_optim[3:6]
     P = x_optim[6:].reshape((-1,3))
