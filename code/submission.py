@@ -259,12 +259,7 @@ def ransacF(pts1, pts2, M):
 
     F_output = eightpoint(p1_final, p2_final, M)
     print(type(F_output))
-
-
     return F_output, p1_final, p2_final
-
-
-
 
 '''
 Q5.2: Rodrigues formula.
